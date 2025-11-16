@@ -18,19 +18,22 @@ function animate(poss::Vector{Vector{Float64}})
     return final
 end
 
-function visualize(billiard::Billiard, p::Particle3D)
-    f = Figure(backgroundcolor=RGBf(1.0, 1.0, 1.0), size=(1000, 1000))
-    ax = LScene(f[1, 1])
+function visualize(billiard::Billiard, p::Particle3D, t::Int64=100)
+    f = Figure(backgroundcolor=RGBf(0.0, 0.0, 0.0), size=(1000, 1000))
+    ax = LScene(f[1, 1], show_axis=false)
 
     sphere = Observable(Sphere(Point3f(p.position), 0.01f0))
     points = Observable([Point3f(p.position)])
 
-    mesh!(ax, to_mesh(billiard), color=(0.4, 0.4, 0.4, 0.1), transparency=true)
-    wireframe!(ax, to_mesh(billiard), color=:black, linewidth=1)
+
+    colors = [(1, 1, 1, 0.8)]
+
+    mesh!(ax, to_mesh(billiard), transparency=true, color=(0.8, 0.8, 0.8, 0.5); shading=false)
+    wireframe!(ax, to_mesh(billiard), color=:white, linewidth=1)
     mesh!(ax, sphere, color=(1.0, 0.0, 0.0, 1.0))
     lines!(ax, points, color=:red, linewidth=2)
 
-    poss, vels = evolve!(billiard, p, 100)
+    poss, vels = evolve!(billiard, p, t)
     # println(is_periodic(poss, vels))
 
     poss = animate(poss)

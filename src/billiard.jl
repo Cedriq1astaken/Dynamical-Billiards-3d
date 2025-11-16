@@ -117,13 +117,12 @@ struct Tetrahedron <: Billiard
             [√8 / 3, 0.0, -1 / 3],
             [-√2 / 3, √6 / 3, -1 / 3],
             [-√2 / 3, -√6 / 3, -1 / 3]], radii::Vector{Float64}=fill(1.0, 4))
-        vertices = [vertices[i] ./ norm(vertices[i]) for i in 1:4]
         v1, v2, v3, v4 = [centroid .+ radii[i] .* vertices[i] for i in 1:4]
         faces = [
-            InfiniteTriangleFace(centroid, v1, v2 - v1, v3 - v1),
+            InfiniteTriangleFace(centroid, v2, v3 - v2, v4 - v2),
             InfiniteTriangleFace(centroid, v1, v3 - v1, v4 - v1),
             InfiniteTriangleFace(centroid, v1, v4 - v1, v2 - v1),
-            InfiniteTriangleFace(centroid, v2, v3 - v2, v4 - v2)
+            InfiniteTriangleFace(centroid, v1, v2 - v1, v3 - v1)
         ]
         new(centroid, radii, [v1, v2, v3, v4], faces)
     end
